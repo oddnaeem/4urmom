@@ -2,73 +2,68 @@
 <html lang="bn">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>স্থানীয় উইকি</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {
       font-family: sans-serif;
+      background: #f5f5f5;
       margin: 0;
       padding: 0;
-      background: #f9f9f9;
     }
-
     header {
-      background: #3366cc;
-      color: white;
-      padding: 10px;
+      background: #ffffff;
+      border-bottom: 1px solid #ccc;
+      padding: 10px 20px;
       text-align: center;
     }
-
     nav {
+      background: #e9e9e9;
+      padding: 10px 20px;
       display: flex;
-      justify-content: space-between;
-      background: #eee;
-      padding: 10px;
       flex-wrap: wrap;
+      justify-content: space-between;
     }
-
     nav button {
-      padding: 6px 12px;
       margin: 2px;
+      padding: 6px 10px;
     }
-
     main {
-      padding: 10px;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    .article {
+      max-width: 800px;
+      margin: auto;
+      padding: 15px;
       background: white;
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 8px;
-      box-shadow: 0 0 4px rgba(0,0,0,0.1);
     }
-
-    textarea, input[type="text"], input[type="password"] {
+    .hidden { display: none; }
+    .article {
+      border: 1px solid #ddd;
+      padding: 10px;
+      margin-top: 10px;
+      background: #fff;
+      border-radius: 5px;
+    }
+    textarea, input[type=text], input[type=password] {
       width: 100%;
-      padding: 10px;
-      margin: 6px 0;
-      box-sizing: border-box;
+      padding: 8px;
+      margin: 5px 0;
     }
-
     .admin-btn {
       color: red;
       cursor: pointer;
-      font-weight: bold;
     }
-
     #search-box {
       width: 100%;
       padding: 8px;
-      margin: 10px 0;
-      font-size: 16px;
+      margin-bottom: 10px;
     }
-
-    @media screen and (max-width: 600px) {
+    a {
+      color: #0645ad;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    @media (max-width: 600px) {
       nav {
         flex-direction: column;
         gap: 5px;
@@ -79,7 +74,7 @@
 <body>
 
 <header>
-  <h1>স্থানীয় উইকি</h1>
+  <h1><a href="#" onclick="renderArticles()">স্থানীয় উইকি</a></h1>
 </header>
 
 <nav>
@@ -88,28 +83,27 @@
     <button onclick="showLogin()">লগইন</button>
     <button onclick="showRegister()">রেজিস্টার</button>
     <button onclick="logout()">লগআউট</button>
+    <button onclick="showEditor()">✍️ নতুন প্রবন্ধ</button>
   </div>
 </nav>
 
 <main>
-  <input type="text" id="search-box" placeholder="🔍 সার্চ করুন..." oninput="renderArticles()">
+  <input id="search-box" type="text" placeholder="🔍 সার্চ করুন..." oninput="renderArticles()">
 
   <section id="auth-section" class="hidden">
-    <h3 id="auth-title">লগইন করুন</h3>
-    <input type="text" id="username" placeholder="ইউজারনেম">
-    <input type="password" id="password" placeholder="পাসওয়ার্ড">
+    <h3 id="auth-title">লগইন</h3>
+    <input id="username" type="text" placeholder="ইউজারনেম">
+    <input id="password" type="password" placeholder="পাসওয়ার্ড">
     <button onclick="submitAuth()">জমা দিন</button>
   </section>
 
   <section id="editor-section" class="hidden">
-    <h3>নতুন/সম্পাদিত প্রবন্ধ</h3>
-    <input type="text" id="article-title" placeholder="শিরোনাম">
-    <textarea id="article-content" rows="6" placeholder="**মার্কডাউন** লিখুন..."></textarea>
-    <button onclick="saveArticle()">সংরক্ষণ করুন</button>
+    <h3>প্রবন্ধ সম্পাদক</h3>
+    <input id="article-title" type="text" placeholder="শিরোনাম">
+    <textarea id="article-content" rows="8" placeholder="**মার্কডাউন** দিয়ে লিখুন..."></textarea>
+    <button onclick="saveArticle()">সংরক্ষণ</button>
     <div id="preview-box" class="article hidden"></div>
   </section>
-
-  <button onclick="showEditor()">✍️ নতুন প্রবন্ধ লিখুন</button>
 
   <section id="articles-section"></section>
 </main>
@@ -120,26 +114,23 @@
 
   function init() {
     const user = localStorage.getItem("sessionUser");
-    if (user) {
-      currentUser = JSON.parse(user);
-      updateUserInfo();
-    }
+    if (user) currentUser = JSON.parse(user);
+    updateUserInfo();
     renderArticles();
   }
 
   function updateUserInfo() {
-    const info = document.getElementById("user-info");
-    info.innerText = currentUser ? `${currentUser.username} (${currentUser.role})` : "অতিথি";
+    document.getElementById("user-info").innerText = currentUser ? `${currentUser.username} (${currentUser.role})` : "অতিথি";
   }
 
   function showLogin() {
+    document.getElementById("auth-title").innerText = "লগইন";
     document.getElementById("auth-section").classList.remove("hidden");
-    document.getElementById("auth-title").innerText = "লগইন করুন";
   }
 
   function showRegister() {
+    document.getElementById("auth-title").innerText = "রেজিস্টার";
     document.getElementById("auth-section").classList.remove("hidden");
-    document.getElementById("auth-title").innerText = "রেজিস্টার করুন";
   }
 
   function logout() {
@@ -150,42 +141,37 @@
   }
 
   function submitAuth() {
-    const uname = document.getElementById("username").value;
-    const pass = document.getElementById("password").value;
-    const title = document.getElementById("auth-title").innerText;
+    const uname = document.getElementById("username").value.trim();
+    const pass = document.getElementById("password").value.trim();
+    const isRegister = document.getElementById("auth-title").innerText === "রেজিস্টার";
 
-    const users = JSON.parse(localStorage.getItem("users") || "[]");
+    let users = JSON.parse(localStorage.getItem("users") || "[]");
 
-    if (title.includes("রেজিস্টার")) {
-      if (users.some(u => u.username === uname)) {
-        alert("ইউজার আগে থেকেই আছে");
-        return;
-      }
+    if (isRegister) {
+      if (users.some(u => u.username === uname)) return alert("ইউজার আগে থেকেই আছে");
       const role = uname === "admin" ? "admin" : "user";
       users.push({ username: uname, password: pass, role });
       localStorage.setItem("users", JSON.stringify(users));
-      alert("রেজিস্টার সফল!");
+      alert("রেজিস্টার সম্পন্ন!");
     }
 
     const found = users.find(u => u.username === uname && u.password === pass);
     if (found) {
-      localStorage.setItem("sessionUser", JSON.stringify(found));
       currentUser = found;
+      localStorage.setItem("sessionUser", JSON.stringify(found));
       updateUserInfo();
       document.getElementById("auth-section").classList.add("hidden");
       renderArticles();
     } else {
-      alert("ভুল ইউজারনেম বা পাসওয়ার্ড!");
+      alert("লগইন ব্যর্থ!");
     }
   }
 
   function showEditor(id = null) {
     document.getElementById("editor-section").classList.remove("hidden");
     const preview = document.getElementById("preview-box");
-    preview.innerHTML = "";
     preview.classList.add("hidden");
-
-    if (id !== null) {
+    if (id) {
       const articles = JSON.parse(localStorage.getItem("articles") || "[]");
       const a = articles.find(a => a.id === id);
       document.getElementById("article-title").value = a.title;
@@ -199,17 +185,17 @@
   }
 
   function saveArticle() {
-    const title = document.getElementById("article-title").value;
-    const content = document.getElementById("article-content").value;
-    if (!title || !content) return alert("ফাঁকা রাখা যাবে না");
+    const title = document.getElementById("article-title").value.trim();
+    const content = document.getElementById("article-content").value.trim();
+    if (!title || !content) return alert("শিরোনাম ও কনটেন্ট দিতে হবে");
 
-    const articles = JSON.parse(localStorage.getItem("articles") || "[]");
+    let articles = JSON.parse(localStorage.getItem("articles") || "[]");
 
-    if (editId !== null) {
+    if (editId) {
       const idx = articles.findIndex(a => a.id === editId);
-      if (idx >= 0) {
+      if (idx !== -1) {
         if (currentUser.username !== articles[idx].author && currentUser.role !== "admin") {
-          return alert("এই আর্টিকেল আপনি সম্পাদনা করতে পারবেন না");
+          return alert("আপনি এটি সম্পাদনা করতে পারবেন না");
         }
         articles[idx].title = title;
         articles[idx].content = content;
@@ -225,28 +211,27 @@
   }
 
   function renderArticles() {
-    const section = document.getElementById("articles-section");
-    section.innerHTML = "";
+    const list = document.getElementById("articles-section");
+    list.innerHTML = "";
 
-    const searchText = document.getElementById("search-box")?.value.toLowerCase() || "";
+    const q = document.getElementById("search-box").value.toLowerCase();
     const articles = JSON.parse(localStorage.getItem("articles") || "[]");
 
-    const filtered = articles.filter(article =>
-      article.title.toLowerCase().includes(searchText) ||
-      article.content.toLowerCase().includes(searchText)
+    const filtered = articles.filter(a =>
+      a.title.toLowerCase().includes(q) || a.content.toLowerCase().includes(q)
     );
 
     filtered.forEach(article => {
       const div = document.createElement("div");
       div.className = "article";
       div.innerHTML = `
-        <h3>${article.title}</h3>
+        <h2>${article.title}</h2>
         <div>${renderMarkdown(article.content)}</div>
-        <small>লিখেছেন: ${article.author}</small><br/>
-        ${canEdit(article) ? `<button onclick="showEditor(${article.id})">✏️</button>` : ""}
-        ${canDelete(article) ? `<span class="admin-btn" onclick="deleteArticle(${article.id})">🗑️</span>` : ""}
+        <small>লিখেছেন: ${article.author}</small><br>
+        ${canEdit(article) ? `<button onclick="showEditor(${article.id})">✏️ সম্পাদনা</button>` : ""}
+        ${canDelete(article) ? `<button class="admin-btn" onclick="deleteArticle(${article.id})">🗑️ মুছুন</button>` : ""}
       `;
-      section.appendChild(div);
+      list.appendChild(div);
     });
   }
 
@@ -272,17 +257,17 @@
       .replace(/^# (.*$)/gim, '<h1>$1</h1>')
       .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
       .replace(/\*(.*?)\*/gim, '<em>$1</em>')
-      .replace(/\n/g, '<br/>');
+      .replace(/\n/g, '<br>');
   }
 
   document.getElementById("article-content").addEventListener("input", function () {
-    const content = this.value;
     const preview = document.getElementById("preview-box");
+    preview.innerHTML = renderMarkdown(this.value);
     preview.classList.remove("hidden");
-    preview.innerHTML = renderMarkdown(content);
   });
 
   init();
 </script>
+
 </body>
 </html>
