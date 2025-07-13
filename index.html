@@ -1,160 +1,282 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <title>স্টাডি প্রগ্রেস ট্র্যাকার</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #f5faff;
-      margin: 0;
-      padding: 0;
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>পারফেক্ট স্টাডি ট্র্যাকার</title>
+<style>
+  /* Reset */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0; padding: 0;
+    font-family: 'Noto Sans Bengali', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f9fbfd;
+    color: #1e293b;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  header {
+    background-color: #2563eb;
+    color: white;
+    padding: 1rem 0;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    box-shadow: 0 2px 6px rgb(37 99 235 / 0.3);
+  }
+  main {
+    flex-grow: 1;
+    max-width: 480px;
+    margin: 1rem auto;
+    background: #fff;
+    border-radius: 12px;
+    padding: 1.25rem 1rem 2rem;
+    box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
+  }
+  .date {
+    font-weight: 600;
+    font-size: 1.15rem;
+    color: #2563eb;
+    text-align: center;
+    margin-bottom: 1.25rem;
+  }
+  ul.task-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  ul.task-list li {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  ul.task-list li:last-child {
+    border-bottom: none;
+  }
+  ul.task-list label {
+    flex-grow: 1;
+    cursor: pointer;
+    font-size: 1.05rem;
+    user-select: none;
+  }
+  ul.task-list input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+    margin-right: 15px;
+    cursor: pointer;
+  }
+  button#saveBtn {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background-color: #2563eb;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+    font-size: 1.1rem;
+    cursor: pointer;
+    margin-top: 1.5rem;
+    box-shadow: 0 4px 8px rgb(37 99 235 / 0.4);
+    transition: background-color 0.3s ease;
+  }
+  button#saveBtn:hover {
+    background-color: #1e40af;
+  }
+  .suggestion {
+    margin-top: 1.5rem;
+    padding: 1rem 1rem;
+    border-left: 5px solid #2563eb;
+    background-color: #e0e7ff;
+    color: #1e3a8a;
+    font-size: 1rem;
+    border-radius: 6px;
+    line-height: 1.4;
+  }
+  .history {
+    margin-top: 2rem;
+  }
+  .history h3 {
+    text-align: center;
+    color: #2563eb;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    font-size: 1.2rem;
+  }
+  .history-list {
+    max-height: 210px;
+    overflow-y: auto;
+    background: #f1f5ff;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    padding: 10px 12px;
+  }
+  .history-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    padding: 8px 6px;
+    border-bottom: 1px solid #cbd5e1;
+    user-select: none;
+  }
+  .history-item:last-child {
+    border-bottom: none;
+  }
+  .history-item.complete {
+    color: #16a34a; /* green */
+    font-weight: 600;
+  }
+  .history-item.incomplete {
+    color: #dc2626; /* red */
+    font-weight: 600;
+  }
+  @media (max-width: 400px) {
+    main {
+      margin: 1rem 0.75rem;
+      padding: 1rem 0.75rem 1.5rem;
     }
-
-    header {
-      background: #0077cc;
-      color: white;
-      padding: 15px;
-      text-align: center;
-      font-size: 1.5rem;
+    .date {
+      font-size: 1.05rem;
     }
-
-    .container {
-      max-width: 800px;
-      margin: auto;
-      padding: 20px;
-    }
-
-    .date-label {
-      font-weight: bold;
-      font-size: 1.2rem;
-      margin-bottom: 10px;
-    }
-
-    .checklist label {
-      display: flex;
-      align-items: center;
-      padding: 8px 0;
-    }
-
-    .checklist input[type="checkbox"] {
-      margin-right: 10px;
-      transform: scale(1.3);
-    }
-
-    button {
-      margin-top: 20px;
-      padding: 10px 20px;
-      background: #0077cc;
-      color: white;
-      border: none;
-      border-radius: 4px;
+    button#saveBtn {
       font-size: 1rem;
-      cursor: pointer;
+      padding: 12px;
     }
-
-    button:hover {
-      background: #005fa3;
-    }
-
-    .history {
-      margin-top: 40px;
-    }
-
-    .history h3 {
-      margin-bottom: 10px;
-    }
-
-    .history-entry {
-      background: #fff;
-      border: 1px solid #ddd;
-      margin-bottom: 10px;
-      padding: 10px;
-      border-radius: 5px;
-    }
-
-    .history-entry.complete {
-      border-left: 5px solid green;
-    }
-
-    .history-entry.incomplete {
-      border-left: 5px solid red;
-    }
-  </style>
+  }
+</style>
 </head>
 <body>
-  <header>📘 স্টাডি প্রগ্রেস ট্র্যাকার</header>
-
-  <div class="container">
-    <div class="date-label" id="todayLabel"></div>
-    <div class="checklist" id="checklist">
-      <!-- Checklist items will go here -->
-    </div>
-    <button onclick="saveProgress()">✅ সেভ করুন</button>
-
+  <header>📚 পারফেক্ট স্টাডি ট্র্যাকার</header>
+  <main>
+    <div class="date" id="date"></div>
+    <ul class="task-list" id="taskList"></ul>
+    <button id="saveBtn">সেভ করুন</button>
+    <div class="suggestion" id="suggestion" style="display:none;"></div>
     <div class="history">
-      <h3>📅 বিগত প্রগ্রেস</h3>
-      <div id="historyList"></div>
+      <h3>বিগত দিনের পারফরম্যান্স</h3>
+      <div class="history-list" id="historyList"></div>
     </div>
-  </div>
+  </main>
 
-  <script>
-    const tasks = [
-      "📖 নতুন টপিক শেখা",
-      "🔁 পুরানো টপিক রিভিশন",
-      "✍️ নোট নেওয়া",
-      "📝 প্র্যাকটিস/সমাধান করা",
-      "⏰ নির্দিষ্ট সময় পর্যন্ত পড়াশোনা",
-      "🎯 প্ল্যান অনুযায়ী চলা"
-    ];
+<script>
+  const tasks = [
+    "নতুন টপিক পড়া",
+    "পুরানো বিষয় রিভিশন",
+    "নোটস তৈরি করা",
+    "প্র্যাকটিস করা",
+    "পর্যাপ্ত সময় পড়াশোনা",
+    "আজকের প্ল্যান অনুযায়ী কাজ"
+  ];
 
-    const checklistContainer = document.getElementById('checklist');
-    const todayLabel = document.getElementById('todayLabel');
-    const historyList = document.getElementById('historyList');
+  const taskList = document.getElementById('taskList');
+  const dateEl = document.getElementById('date');
+  const saveBtn = document.getElementById('saveBtn');
+  const suggestionEl = document.getElementById('suggestion');
+  const historyList = document.getElementById('historyList');
 
-    const today = new Date().toISOString().split('T')[0];
-    todayLabel.innerText = "আজকের তারিখ: " + today;
+  // আজকের তারিখ ফরম্যাট
+  const today = new Date();
+  const todayStr = today.toISOString().slice(0,10);
+  dateEl.textContent = `আজকের তারিখ: ${todayStr}`;
 
-    // Load checklist
-    tasks.forEach((task, index) => {
+  // চেকলিস্ট তৈরি
+  function createTasks(progress=[]) {
+    taskList.innerHTML = "";
+    tasks.forEach((task, i) => {
+      const li = document.createElement('li');
       const label = document.createElement('label');
+      label.htmlFor = `task-${i}`;
+
       const checkbox = document.createElement('input');
       checkbox.type = 'checkbox';
-      checkbox.id = `task-${index}`;
+      checkbox.id = `task-${i}`;
+      checkbox.checked = progress[i] || false;
+
       label.appendChild(checkbox);
       label.appendChild(document.createTextNode(task));
-      checklistContainer.appendChild(label);
+      li.appendChild(label);
+      taskList.appendChild(li);
     });
+  }
 
-    // Save progress to localStorage
-    function saveProgress() {
-      const progress = tasks.map((_, index) => {
-        return document.getElementById(`task-${index}`).checked;
-      });
-
-      const data = JSON.parse(localStorage.getItem("studyProgress") || "{}");
-      data[today] = progress;
-      localStorage.setItem("studyProgress", JSON.stringify(data));
-      loadHistory();
-      alert("✅ আজকের প্রগ্রেস সেভ হয়েছে!");
+  // লোকালস্টোরেজ থেকে ডেটা লোড
+  function loadData() {
+    const dataRaw = localStorage.getItem('studyPerformance') || '{}';
+    try {
+      return JSON.parse(dataRaw);
+    } catch(e) {
+      return {};
     }
+  }
 
-    // Load and display past progress
-    function loadHistory() {
-      const data = JSON.parse(localStorage.getItem("studyProgress") || "{}");
-      historyList.innerHTML = "";
-      Object.keys(data).reverse().forEach(date => {
-        const completed = data[date].filter(v => v).length;
-        const total = data[date].length;
-        const entry = document.createElement("div");
-        entry.className = "history-entry " + (completed === total ? "complete" : "incomplete");
-        entry.innerHTML = `<strong>${date}</strong>: ${completed}/${total} কাজ সম্পন্ন ✅`;
-        historyList.appendChild(entry);
-      });
-    }
+  // ডেটা সেভ
+  function saveData(data) {
+    localStorage.setItem('studyPerformance', JSON.stringify(data));
+  }
 
-    // Initial load
+  // আজকের প্রগ্রেস সেভ করা
+  function saveProgress() {
+    const data = loadData();
+    const progress = tasks.map((_,i) => document.getElementById(`task-${i}`).checked);
+    data[todayStr] = progress;
+    saveData(data);
+    showSuggestion(progress);
     loadHistory();
-  </script>
+    alert("✅ আজকের প্রগ্রেস সেভ হয়েছে!");
+  }
+
+  // পারফরম্যান্স দেখে সাজেশন দেখানো (ন্যাচারাল মেসেজ)
+  function showSuggestion(progress) {
+    const doneCount = progress.filter(x=>x).length;
+    let msg = "";
+    if(doneCount === tasks.length) {
+      msg = "অভিনন্দন! আজ আপনার সব কাজ শেষ হয়েছে, সত্যিই দারুণ হয়েছে। আজ একটু বিশ্রাম নিন কিংবা নতুন কিছু মজা করে শিখুন!";
+    } else if(doneCount >= tasks.length * 0.7) {
+      msg = "খুব ভালো শুরু করেছেন! বাকিটা কাজটাও আজ শেষ করার চেষ্টা করুন, আপনি পারবেন।";
+    } else if(doneCount >= tasks.length * 0.4) {
+      msg = "কিছু কাজ করেছেন, যা ভালো। এখন একটু বেশি ফোকাস দিয়ে রিভিশন আর প্র্যাকটিস করুন, দারুণ হবে।";
+    } else {
+      msg = "আবারো চেষ্টা শুরু করার সময় এসেছে! একটু মন দিয়ে কাজ করলে সহজেই এগোতে পারবেন, আজকে পরিকল্পনা করে শুরু করুন।";
+    }
+    suggestionEl.textContent = msg;
+    suggestionEl.style.display = 'block';
+  }
+
+  // বিগত দিনের পারফরম্যান্স লোড
+  function loadHistory() {
+    const data = loadData();
+    historyList.innerHTML = "";
+    const dates = Object.keys(data).sort((a,b) => b.localeCompare(a));
+    if(dates.length === 0) {
+      historyList.innerHTML = "<p style='text-align:center; color:#64748b;'>কোনো তথ্য নেই</p>";
+      return;
+    }
+    dates.forEach(date => {
+      const progress = data[date];
+      const doneCount = progress.filter(x=>x).length;
+      const total = progress.length;
+      const div = document.createElement('div');
+      div.classList.add('history-item');
+      div.classList.add(doneCount === total ? 'complete' : 'incomplete');
+      div.textContent = `${date}: ${doneCount}/${total} কাজ সম্পন্ন`;
+      historyList.appendChild(div);
+    });
+  }
+
+  // শুরুতে ডাটা লোড ও UI তৈরি
+  const data = loadData();
+  const todayProgress = data[todayStr] || [];
+  createTasks(todayProgress);
+  if(todayProgress.length > 0) {
+    showSuggestion(todayProgress);
+  }
+  loadHistory();
+
+  saveBtn.addEventListener('click', saveProgress);
+</script>
 </body>
 </html>
