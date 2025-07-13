@@ -1,269 +1,288 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>বদ অভ্যাস থেকে মুক্তি</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>স্থানীয় উইকি</title>
   <style>
-    *, *::before, *::after { box-sizing: border-box; }
     body {
-      margin: 0; padding: 0;
-      font-family: 'Noto Sans Bengali', 'Segoe UI', sans-serif;
-      background: #f0f4ff;
-      color: #1e293b;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-    header {
-      background-color: #2563eb;
-      color: white;
-      padding: 1rem 0;
-      text-align: center;
-      font-size: 1.5rem;
-      font-weight: 700;
-      box-shadow: 0 2px 6px rgb(37 99 235 / 0.3);
-    }
-    main {
-      flex-grow: 1;
-      max-width: 480px;
-      margin: 1rem auto;
-      background: white;
-      border-radius: 12px;
-      padding: 1.5rem 1rem 2rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    .date {
-      font-weight: 600;
-      font-size: 1.15rem;
-      color: #2563eb;
-      text-align: center;
-      margin-bottom: 1.25rem;
-    }
-    ul.task-list {
-      list-style: none;
-      padding: 0;
+      font-family: sans-serif;
       margin: 0;
+      padding: 0;
+      background: #f9f9f9;
     }
-    ul.task-list li {
-      display: flex;
-      align-items: center;
-      padding: 12px 0;
-      border-bottom: 1px solid #e2e8f0;
-    }
-    ul.task-list li:last-child {
-      border-bottom: none;
-    }
-    ul.task-list label {
-      flex-grow: 1;
-      cursor: pointer;
-      font-size: 1.05rem;
-      user-select: none;
-    }
-    ul.task-list input[type="checkbox"] {
-      width: 22px;
-      height: 22px;
-      margin-right: 15px;
-      cursor: pointer;
-    }
-    button#saveBtn {
-      width: 100%;
-      padding: 14px;
-      background-color: #2563eb;
-      border: none;
-      border-radius: 8px;
+
+    header {
+      background: #3366cc;
       color: white;
-      font-weight: 600;
-      font-size: 1.1rem;
-      cursor: pointer;
-      margin-top: 1.5rem;
-      box-shadow: 0 4px 8px rgb(37 99 235 / 0.4);
-    }
-    button#saveBtn:hover {
-      background-color: #1e40af;
-    }
-    .suggestion {
-      margin-top: 1.5rem;
-      padding: 1rem;
-      border-left: 5px solid #2563eb;
-      background-color: #e0e7ff;
-      color: #1e3a8a;
-      font-size: 1rem;
-      border-radius: 6px;
-      line-height: 1.4;
-    }
-    .history {
-      margin-top: 2rem;
-    }
-    .history h3 {
+      padding: 10px;
       text-align: center;
-      color: #2563eb;
-      font-weight: 700;
-      margin-bottom: 0.75rem;
-      font-size: 1.2rem;
     }
-    .history-list {
-      max-height: 210px;
-      overflow-y: auto;
-      background: #f1f5ff;
-      border-radius: 8px;
-      border: 1px solid #cbd5e1;
-      padding: 10px 12px;
-    }
-    .history-item {
+
+    nav {
       display: flex;
       justify-content: space-between;
-      font-size: 0.9rem;
-      padding: 8px 6px;
-      border-bottom: 1px solid #cbd5e1;
-      user-select: none;
+      background: #eee;
+      padding: 10px;
+      flex-wrap: wrap;
     }
-    .history-item:last-child {
-      border-bottom: none;
+
+    nav button {
+      padding: 6px 12px;
+      margin: 2px;
     }
-    .history-item.complete {
-      color: #16a34a;
-      font-weight: 600;
+
+    main {
+      padding: 10px;
     }
-    .history-item.incomplete {
-      color: #dc2626;
-      font-weight: 600;
+
+    .hidden {
+      display: none;
     }
-    @media (max-width: 400px) {
-      main {
-        margin: 1rem 0.75rem;
-        padding: 1rem;
-      }
-      .date {
-        font-size: 1.05rem;
-      }
-      button#saveBtn {
-        font-size: 1rem;
-        padding: 12px;
+
+    .article {
+      background: white;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 8px;
+      box-shadow: 0 0 4px rgba(0,0,0,0.1);
+    }
+
+    textarea, input[type="text"], input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin: 6px 0;
+      box-sizing: border-box;
+    }
+
+    .admin-btn {
+      color: red;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    #search-box {
+      width: 100%;
+      padding: 8px;
+      margin: 10px 0;
+      font-size: 16px;
+    }
+
+    @media screen and (max-width: 600px) {
+      nav {
+        flex-direction: column;
+        gap: 5px;
       }
     }
   </style>
 </head>
 <body>
-  <header>🚫 বদ অভ্যাস থেকে মুক্তি</header>
-  <main>
-    <div class="date" id="date"></div>
-    <ul class="task-list" id="taskList"></ul>
-    <button id="saveBtn">সেভ করুন</button>
-    <div class="suggestion" id="suggestion" style="display:none;"></div>
-    <div class="history">
-      <h3>আপনার বিগত অগ্রগতি</h3>
-      <div class="history-list" id="historyList"></div>
-    </div>
-  </main>
 
-  <script>
-    const tasks = [
-      "৫ মিনিট মেডিটেশন বা শ্বাস-প্রশ্বাস অনুশীলন",
-      "৩০ মিনিট মোবাইল ছাড়া সময় কাটানো",
-      "নির্দিষ্ট সময় ঘুম থেকে ওঠা",
-      "খারাপ অভ্যাস সম্পর্কে জার্নাল লেখা",
-      "হেলদি বিকল্প কাজে সময় দেওয়া",
-      "নিজেকে ১টি ছোট পুরস্কার দেওয়া, যদি নিয়ন্ত্রণে থাকেন"
-    ];
+<header>
+  <h1>স্থানীয় উইকি</h1>
+</header>
 
-    const taskList = document.getElementById('taskList');
-    const dateEl = document.getElementById('date');
-    const saveBtn = document.getElementById('saveBtn');
-    const suggestionEl = document.getElementById('suggestion');
-    const historyList = document.getElementById('historyList');
+<nav>
+  <div id="user-info">অতিথি</div>
+  <div>
+    <button onclick="showLogin()">লগইন</button>
+    <button onclick="showRegister()">রেজিস্টার</button>
+    <button onclick="logout()">লগআউট</button>
+  </div>
+</nav>
 
-    const today = new Date();
-    const todayStr = today.toISOString().slice(0,10);
-    dateEl.textContent = `আজকের তারিখ: ${todayStr}`;
+<main>
+  <input type="text" id="search-box" placeholder="🔍 সার্চ করুন..." oninput="renderArticles()">
 
-    function createTasks(progress=[]) {
-      taskList.innerHTML = "";
-      tasks.forEach((task, i) => {
-        const li = document.createElement('li');
-        const label = document.createElement('label');
-        label.htmlFor = `task-${i}`;
+  <section id="auth-section" class="hidden">
+    <h3 id="auth-title">লগইন করুন</h3>
+    <input type="text" id="username" placeholder="ইউজারনেম">
+    <input type="password" id="password" placeholder="পাসওয়ার্ড">
+    <button onclick="submitAuth()">জমা দিন</button>
+  </section>
 
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.id = `task-${i}`;
-        checkbox.checked = progress[i] || false;
+  <section id="editor-section" class="hidden">
+    <h3>নতুন/সম্পাদিত প্রবন্ধ</h3>
+    <input type="text" id="article-title" placeholder="শিরোনাম">
+    <textarea id="article-content" rows="6" placeholder="**মার্কডাউন** লিখুন..."></textarea>
+    <button onclick="saveArticle()">সংরক্ষণ করুন</button>
+    <div id="preview-box" class="article hidden"></div>
+  </section>
 
-        label.appendChild(checkbox);
-        label.appendChild(document.createTextNode(task));
-        li.appendChild(label);
-        taskList.appendChild(li);
-      });
+  <button onclick="showEditor()">✍️ নতুন প্রবন্ধ লিখুন</button>
+
+  <section id="articles-section"></section>
+</main>
+
+<script>
+  let currentUser = null;
+  let editId = null;
+
+  function init() {
+    const user = localStorage.getItem("sessionUser");
+    if (user) {
+      currentUser = JSON.parse(user);
+      updateUserInfo();
     }
+    renderArticles();
+  }
 
-    function loadData() {
-      const dataRaw = localStorage.getItem('habitBreakData') || '{}';
-      try {
-        return JSON.parse(dataRaw);
-      } catch(e) {
-        return {};
-      }
-    }
+  function updateUserInfo() {
+    const info = document.getElementById("user-info");
+    info.innerText = currentUser ? `${currentUser.username} (${currentUser.role})` : "অতিথি";
+  }
 
-    function saveData(data) {
-      localStorage.setItem('habitBreakData', JSON.stringify(data));
-    }
+  function showLogin() {
+    document.getElementById("auth-section").classList.remove("hidden");
+    document.getElementById("auth-title").innerText = "লগইন করুন";
+  }
 
-    function saveProgress() {
-      const data = loadData();
-      const progress = tasks.map((_,i) => document.getElementById(`task-${i}`).checked);
-      data[todayStr] = progress;
-      saveData(data);
-      showSuggestion(progress);
-      loadHistory();
-      alert("✅ আজকের অগ্রগতি সংরক্ষণ করা হয়েছে!");
-    }
+  function showRegister() {
+    document.getElementById("auth-section").classList.remove("hidden");
+    document.getElementById("auth-title").innerText = "রেজিস্টার করুন";
+  }
 
-    function showSuggestion(progress) {
-      const doneCount = progress.filter(x=>x).length;
-      let msg = "";
-      if(doneCount === tasks.length) {
-        msg = "অসাধারণ! আপনি আজ সবকিছু নিয়ন্ত্রণে রাখতে পেরেছেন। এভাবেই চালিয়ে যান।";
-      } else if(doneCount >= tasks.length * 0.7) {
-        msg = "খুব ভালো! আপনি বেশিরভাগ কাজ করেছেন। আরেকটু চেষ্টায় পুরোপুরি নিয়ন্ত্রণে আসা সম্ভব।";
-      } else if(doneCount >= tasks.length * 0.4) {
-        msg = "আধা আধা হয়েছে — এখনই সময় সজাগ হওয়ার। সেলফ কন্ট্রোল বাড়ান।";
-      } else {
-        msg = "আজ একটু কঠিন গেছে মনে হচ্ছে। কাল থেকে ছোট ছোট স্টেপে এগোন, আপনি পারবেন।";
-      }
-      suggestionEl.textContent = msg;
-      suggestionEl.style.display = 'block';
-    }
+  function logout() {
+    localStorage.removeItem("sessionUser");
+    currentUser = null;
+    updateUserInfo();
+    renderArticles();
+  }
 
-    function loadHistory() {
-      const data = loadData();
-      historyList.innerHTML = "";
-      const dates = Object.keys(data).sort((a,b) => b.localeCompare(a));
-      if(dates.length === 0) {
-        historyList.innerHTML = "<p style='text-align:center; color:#64748b;'>কোনো রেকর্ড নেই</p>";
+  function submitAuth() {
+    const uname = document.getElementById("username").value;
+    const pass = document.getElementById("password").value;
+    const title = document.getElementById("auth-title").innerText;
+
+    const users = JSON.parse(localStorage.getItem("users") || "[]");
+
+    if (title.includes("রেজিস্টার")) {
+      if (users.some(u => u.username === uname)) {
+        alert("ইউজার আগে থেকেই আছে");
         return;
       }
-      dates.forEach(date => {
-        const progress = data[date];
-        const doneCount = progress.filter(x=>x).length;
-        const total = progress.length;
-        const div = document.createElement('div');
-        div.classList.add('history-item');
-        div.classList.add(doneCount === total ? 'complete' : 'incomplete');
-        div.textContent = `${date}: ${doneCount}/${total} টাস্ক সম্পন্ন`;
-        historyList.appendChild(div);
-      });
+      const role = uname === "admin" ? "admin" : "user";
+      users.push({ username: uname, password: pass, role });
+      localStorage.setItem("users", JSON.stringify(users));
+      alert("রেজিস্টার সফল!");
     }
 
-    const data = loadData();
-    const todayProgress = data[todayStr] || [];
-    createTasks(todayProgress);
-    if(todayProgress.length > 0) {
-      showSuggestion(todayProgress);
+    const found = users.find(u => u.username === uname && u.password === pass);
+    if (found) {
+      localStorage.setItem("sessionUser", JSON.stringify(found));
+      currentUser = found;
+      updateUserInfo();
+      document.getElementById("auth-section").classList.add("hidden");
+      renderArticles();
+    } else {
+      alert("ভুল ইউজারনেম বা পাসওয়ার্ড!");
     }
-    loadHistory();
+  }
 
-    saveBtn.addEventListener('click', saveProgress);
-  </script>
+  function showEditor(id = null) {
+    document.getElementById("editor-section").classList.remove("hidden");
+    const preview = document.getElementById("preview-box");
+    preview.innerHTML = "";
+    preview.classList.add("hidden");
+
+    if (id !== null) {
+      const articles = JSON.parse(localStorage.getItem("articles") || "[]");
+      const a = articles.find(a => a.id === id);
+      document.getElementById("article-title").value = a.title;
+      document.getElementById("article-content").value = a.content;
+      editId = id;
+    } else {
+      editId = null;
+      document.getElementById("article-title").value = "";
+      document.getElementById("article-content").value = "";
+    }
+  }
+
+  function saveArticle() {
+    const title = document.getElementById("article-title").value;
+    const content = document.getElementById("article-content").value;
+    if (!title || !content) return alert("ফাঁকা রাখা যাবে না");
+
+    const articles = JSON.parse(localStorage.getItem("articles") || "[]");
+
+    if (editId !== null) {
+      const idx = articles.findIndex(a => a.id === editId);
+      if (idx >= 0) {
+        if (currentUser.username !== articles[idx].author && currentUser.role !== "admin") {
+          return alert("এই আর্টিকেল আপনি সম্পাদনা করতে পারবেন না");
+        }
+        articles[idx].title = title;
+        articles[idx].content = content;
+      }
+    } else {
+      const id = Date.now();
+      articles.push({ id, title, content, author: currentUser.username });
+    }
+
+    localStorage.setItem("articles", JSON.stringify(articles));
+    document.getElementById("editor-section").classList.add("hidden");
+    renderArticles();
+  }
+
+  function renderArticles() {
+    const section = document.getElementById("articles-section");
+    section.innerHTML = "";
+
+    const searchText = document.getElementById("search-box")?.value.toLowerCase() || "";
+    const articles = JSON.parse(localStorage.getItem("articles") || "[]");
+
+    const filtered = articles.filter(article =>
+      article.title.toLowerCase().includes(searchText) ||
+      article.content.toLowerCase().includes(searchText)
+    );
+
+    filtered.forEach(article => {
+      const div = document.createElement("div");
+      div.className = "article";
+      div.innerHTML = `
+        <h3>${article.title}</h3>
+        <div>${renderMarkdown(article.content)}</div>
+        <small>লিখেছেন: ${article.author}</small><br/>
+        ${canEdit(article) ? `<button onclick="showEditor(${article.id})">✏️</button>` : ""}
+        ${canDelete(article) ? `<span class="admin-btn" onclick="deleteArticle(${article.id})">🗑️</span>` : ""}
+      `;
+      section.appendChild(div);
+    });
+  }
+
+  function canEdit(article) {
+    return currentUser && (currentUser.username === article.author || currentUser.role === "admin");
+  }
+
+  function canDelete(article) {
+    return currentUser && currentUser.role === "admin";
+  }
+
+  function deleteArticle(id) {
+    let articles = JSON.parse(localStorage.getItem("articles") || "[]");
+    articles = articles.filter(a => a.id !== id);
+    localStorage.setItem("articles", JSON.stringify(articles));
+    renderArticles();
+  }
+
+  function renderMarkdown(md) {
+    return md
+      .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+      .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+      .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+      .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
+      .replace(/\*(.*?)\*/gim, '<em>$1</em>')
+      .replace(/\n/g, '<br/>');
+  }
+
+  document.getElementById("article-content").addEventListener("input", function () {
+    const content = this.value;
+    const preview = document.getElementById("preview-box");
+    preview.classList.remove("hidden");
+    preview.innerHTML = renderMarkdown(content);
+  });
+
+  init();
+</script>
 </body>
 </html>
