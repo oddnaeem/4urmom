@@ -1,9 +1,10 @@
 const datePicker = document.getElementById("datePicker");
 const qaContainer = document.getElementById("qaContainer");
+
 let gkData = {};
 
 fetch("data.json")
-  .then(res => res.json())
+  .then(response => response.json())
   .then(data => gkData = data);
 
 datePicker.addEventListener("change", () => {
@@ -13,24 +14,15 @@ datePicker.addEventListener("change", () => {
   if (gkData[selectedDate]) {
     gkData[selectedDate].forEach(item => {
       const card = document.createElement("div");
-      card.className = "card";
+      card.className = "card mb-3 p-3";
       card.innerHTML = `
-        <div class="question">প্রশ্ন: ${item.question}</div>
-        <div class="answer">উত্তর: ${item.answer}</div>
-        <div class="explanation">ব্যাখ্যা: ${item.explanation}</div>
+        <h5>❓ প্রশ্ন: ${item.question}</h5>
+        <p>✔️ উত্তর: ${item.answer}</p>
+        <small>ℹ️ ব্যাখ্যা: ${item.explanation}</small>
       `;
       qaContainer.appendChild(card);
     });
   } else {
-    qaContainer.innerHTML = "<p>এই তারিখে কিছুই পাওয়া যায়নি।</p>";
-  }
-});
-
-// সার্চ সাবমিট করলে results.html-এ রিডাইরেক্ট
-document.getElementById("searchForm").addEventListener("submit", function (e) {
-  e.preventDefault();
-  const keyword = document.getElementById("searchInput").value.trim();
-  if (keyword) {
-    window.open(`results.html?search=${encodeURIComponent(keyword)}`, "_blank");
+    qaContainer.innerHTML = `<div class="alert alert-warning">এই তারিখে কোনো তথ্য নেই।</div>`;
   }
 });
