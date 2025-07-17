@@ -1,43 +1,116 @@
-const params = new URLSearchParams(window.location.search);
-const searchQuery = params.get("search");
-const dateQuery = params.get("date");
-const resultsDiv = document.getElementById("results");
+// get search keyword from URL
+function getQueryParam(param) {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(param) || "";
+}
 
-fetch("data.json")
-  .then((res) => res.json())
-  .then((data) => {
-    let output = "";
+const resultsContainer = document.getElementById("resultsContainer");
+const pagination = document.getElementById("pagination");
 
-    if (dateQuery && data[dateQuery]) {
-      data[dateQuery].forEach((entry) => {
-        output += formatEntry(entry, dateQuery);
-      });
-    } else if (searchQuery) {
-      const keyword = searchQuery.toLowerCase();
+const gkDataUrl = "data.json";
+const itemsPerPage = 10;
 
-      for (const date in data) {
-        data[date].forEach((entry) => {
-          const q = entry.question?.toLowerCase() || "";
-          const a = entry.answer?.toLowerCase() || "";
-          const e = entry.explanation?.toLowerCase() || "";
+let allResults = [];
+let currentPage = 1;
+let searchKeyword = getQueryParam("search").trim().toLowerCase();
 
-          if (q.includes(keyword) || a.includes(keyword) || e.includes(keyword)) {
-            output += formatEntry(entry, date);
-          }
-        });
-      }
-    }
+function highlightText(text, keyword) {
+  if (!keyword) return text;
+  // Escape regex special chars in keyword
+  const escapedKeyword = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const regex = new RegExp(`(${escapedKeyword})`, "gi");
+  return text.replace(regex, `<mark>$1</mark>`);
+}
 
-    resultsDiv.innerHTML = output || "<p>❌ কিছুই পাওয়া যায়নি</p>";
+function renderResults(page = 1) {
+  resultsContainer.innerHTML = "";
+  pagination.innerHTML = "";
+
+  if (allResults.length === 0) {
+    resultsContainer.innerHTML = `<p>কোনো ফলাফল পাওয়া যায়নি।</p>`;
+    return;
+  }
+
+  currentPage = page;
+  const startIndex = (page - 1) * itemsPerPage;
+  const endIndex = Math.min(startIndex + itemsPerPage, allResults.length);
+  const pageItems = allResults.slice(startIndex, endIndex);
+
+  pageItems.forEach(item => {
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+      <div class="question">❓ প্রশ্ন: ${highlightText(item.question, searchKeyword)}</div>
+      <div class="answer">✔️ উত্তর: ${highlightText(item.answer, searchKeyword)}</div>
+      <div class="explanation">ℹ️ ব্যাখ্যা: ${highlightText(item.explanation, searchKeyword)}</div>
+    `;
+
+    resultsContainer.appendChild(card);
   });
 
-function formatEntry(entry, date) {
-  return `
-    <div class="result">
-      <strong>📅 তারিখ:</strong> ${date}<br>
-      <strong>❓ প্রশ্ন:</strong> ${entry.question}<br>
-      <strong>✅ উত্তর:</strong> ${entry.answer}<br>
-      <strong>📝 ব্যাখ্যা:</strong> ${entry.explanation}
-    </div><br>
-  `;
+  renderPagination();
 }
+
+function renderPagination() {
+  const totalPages = Math.ceil(allResults.length / itemsPerPage);
+
+  if (totalPages <= 1) return;
+
+  // Prev button
+  const prevBtn = document.createElement("button");
+  prevBtn.textContent = "« Prev";
+  prevBtn.disabled = currentPage === 1;
+  prevBtn.addEventListener("click", () => {
+    if (currentPage > 1) {
+      renderResults(currentPage - 1);
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+  });
+  pagination.appendChild(prevBtn);
+
+  // Page numbers (simple: show 1 to totalPages)
+  for (let i = 1; i <= totalPages; i++) {
+    const pageBtn = document.createElement("button");
+    pageBtn.textContent = i;
+    pageBtn.className = i === currentPage ? "active" : "";
+    pageBtn.addEventListener("click", () => {
+      renderResults(i);
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+    pagination.appendChild(pageBtn);
+  }
+
+  // Next button
+  const nextBtn = document.createElement("button");
+  nextBtn.textContent = "Next »";
+  nextBtn.disabled = currentPage === totalPages;
+  nextBtn.addEventListener("click", () => {
+    if (currentPage < totalPages) {
+      renderResults(currentPage + 1);
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+  });
+  pagination.appendChild(nextBtn);
+}
+
+// Load data and filter by search keyword
+fetch(gkDataUrl)
+  .then(res => res.json())
+  .then(data => {
+    allResults = [];
+
+    for (const date in data) {
+      data[date].forEach(item => {
+        const combinedText = (item.question + " " + item.answer + " " + item.explanation).toLowerCase();
+        if (combinedText.includes(searchKeyword)) {
+          allResults.push(item);
+        }
+      });
+    }
+
+    renderResults(1);
+  })
+  .catch(() => {
+    resultsContainer.innerHTML = `<p>ডেটা লোড করতে সমস্যা হয়েছে।</p>`;
+  });

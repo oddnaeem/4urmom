@@ -1,40 +1,94 @@
-/* ফন্ট, বেসিক বডি স্টাইল */
+/* Basic reset */
+* {
+  box-sizing: border-box;
+}
+
+/* Body and fonts */
 body {
-  font-family: 'Noto Sans Bengali', 'SolaimanLipi', Arial, sans-serif;
+  font-family: 'Noto Sans Bengali', Arial, sans-serif;
   background-color: #f9fafb;
   margin: 0;
   padding: 15px;
   color: #222;
   line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
-  box-sizing: border-box;
 }
 
-/* হেডার */
+/* Header */
 header {
+  position: sticky;
+  top: 0;
+  background: #3498db;
+  color: white;
+  padding: 12px 15px;
   font-size: 1.8rem;
   font-weight: 700;
-  color: #2c3e50;
-  margin-bottom: 20px;
-  text-align: center;
-  padding: 10px 0;
-  border-bottom: 2px solid #3498db;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  z-index: 100;
+  user-select: none;
 }
 
-/* মূল কন্টেইনার */
+/* Search box wrapper */
+.search-wrapper {
+  position: relative;
+  flex-grow: 1;
+  max-width: 350px;
+  transition: max-width 0.3s ease;
+}
+
+/* Search input */
+#searchBox {
+  width: 100%;
+  padding: 8px 32px 8px 12px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+  transition: width 0.3s ease;
+}
+
+/* Search input expanded when focused */
+#searchBox:focus {
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Clear (×) button */
+#searchClearBtn {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: #666;
+  font-size: 1.3rem;
+  cursor: pointer;
+  display: none;
+  user-select: none;
+  padding: 0;
+}
+
+/* Show clear button when input has focus or text */
+#searchBox:not(:placeholder-shown) + #searchClearBtn,
+#searchBox:focus + #searchClearBtn {
+  display: block;
+}
+
+/* Container */
 .container {
-  background-color: #fff;
   max-width: 480px;
-  margin: 0 auto;
+  margin: 20px auto 0;
+  background: white;
   padding: 20px 15px;
-  border-radius: 10px;
+  border-radius: 8px;
   box-shadow: 0 6px 15px rgb(0 0 0 / 0.1);
-  box-sizing: border-box;
 }
 
-/* লেবেল স্টাইল */
+/* Label */
 label {
   display: block;
   font-weight: 600;
@@ -43,48 +97,25 @@ label {
   font-size: 1.1rem;
 }
 
-/* ইনপুট ফিল্ড */
-input[type="date"],
-input[type="text"] {
+/* Date picker input */
+#datePicker {
   width: 100%;
   padding: 12px 14px;
   font-size: 1rem;
   border: 1.5px solid #ccc;
   border-radius: 8px;
-  box-sizing: border-box;
-  transition: border-color 0.3s ease;
   outline: none;
+  transition: border-color 0.3s ease;
 }
 
-input[type="date"]:focus,
-input[type="text"]:focus {
+#datePicker:focus {
   border-color: #3498db;
   box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
 }
 
-/* সার্চ বাটন */
-button {
-  margin-top: 10px;
-  padding: 12px;
-  width: 100%;
-  background-color: #3498db;
-  color: white;
-  font-size: 1.1rem;
-  font-weight: 600;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.25s ease;
-}
-
-button:hover,
-button:focus {
-  background-color: #2980b9;
-}
-
-/* রেজাল্ট কার্ড (প্রশ্ন-উত্তর) */
-.result, .card {
-  background-color: #fefefe;
+/* Question-answer cards */
+.card {
+  background: #fefefe;
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 15px 18px;
@@ -93,7 +124,6 @@ button:focus {
   word-break: break-word;
 }
 
-/* প্রশ্ন, উত্তর, ব্যাখ্যার ভিন্ন ভিন্ন রঙ */
 .question {
   font-weight: 700;
   color: #2c3e50;
@@ -113,12 +143,8 @@ button:focus {
   font-size: 0.95rem;
 }
 
-/* রেস্পন্সিভ মিডিয়া কোয়েরি */
+/* Responsive adjustments */
 @media (max-width: 600px) {
-  body {
-    padding: 12px 10px;
-  }
-
   .container {
     max-width: 100%;
     padding: 15px 12px;
@@ -126,16 +152,37 @@ button:focus {
 
   header {
     font-size: 1.5rem;
+    flex-wrap: wrap;
+    gap: 10px;
   }
+}
+.pagination {
+  margin-top: 20px;
+  text-align: center;
+}
 
-  input[type="date"],
-  input[type="text"],
-  button {
-    font-size: 1rem;
-    padding: 10px 12px;
-  }
+.pagination button {
+  background: #3498db;
+  color: white;
+  border: none;
+  margin: 0 4px;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.25s ease;
+}
 
-  .question {
-    font-size: 1rem;
-  }
+.pagination button:hover:not(:disabled) {
+  background-color: #2980b9;
+}
+
+.pagination button:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+}
+
+.pagination button.active {
+  background-color: #2c3e50;
+  cursor: default;
 }
