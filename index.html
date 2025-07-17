@@ -1,28 +1,28 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <title>সাম্প্রতিক সাধারণ জ্ঞান</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>সাম্প্রতিক জিকে</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
     <div class="header-content">
-      <h1>সাম্প্রতিক সাধারণ জ্ঞান</h1>
+      <h1>সাম্প্রতিক জিকে</h1>
       <form id="searchForm">
-        <input type="text" id="searchInput" placeholder="খুঁজুন...">
+        <input type="text" id="searchInput" placeholder="খোঁজ করুন..." />
+        <span id="clearSearch" onclick="document.getElementById('searchInput').value=''">×</span>
         <button type="submit">🔍</button>
-        <span id="clearSearch">×</span>
       </form>
     </div>
   </header>
 
-  <main class="container">
+  <div class="container">
     <label for="datePicker">তারিখ নির্বাচন করুন:</label>
-    <input type="date" id="datePicker">
+    <input type="date" id="datePicker" />
     <div id="qaContainer"></div>
-  </main>
+  </div>
 
   <script src="script.js"></script>
 </body>
