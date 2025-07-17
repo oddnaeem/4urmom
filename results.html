@@ -10,11 +10,10 @@
   <header>
     <div class="header-content">
       <h1>সার্চ ফলাফল</h1>
-      <form id="searchForm">
-        <input type="text" id="searchInput" placeholder="আবার খুঁজুন..." />
-        <span id="clearSearch" onclick="document.getElementById('searchInput').value=''">×</span>
-        <button type="submit">🔍</button>
-      </form>
+  <form id="searchForm" action="results.html" method="GET">
+  <input type="text" name="search" id="searchInput" placeholder="সার্চ করুন">
+  <button type="submit">সার্চ</button>
+</form>
     </div>
   </header>
 
