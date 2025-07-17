@@ -1,26 +1,28 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
   <title>সাম্প্রতিক জিকে</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
-    সাম্প্রতিক জিকে
-    <div class="search-wrapper">
-      <input type="text" id="searchBox" placeholder="সার্চ করুন..." aria-label="সার্চ বক্স" />
-      <button id="searchBtn" title="সার্চ করুন" aria-label="সার্চ বাটন">🔍</button>
-      <button id="searchClearBtn" title="বন্ধ করুন" aria-label="সার্চ বন্ধ করুন">&times;</button>
+    <div class="header-content">
+      <h1>সাম্প্রতিক জিকে</h1>
+      <form id="searchForm">
+        <input type="text" id="searchInput" placeholder="খুঁজুন...">
+        <button type="submit">🔍</button>
+        <span id="clearSearch">×</span>
+      </form>
     </div>
   </header>
 
-  <div class="container">
+  <main class="container">
     <label for="datePicker">তারিখ নির্বাচন করুন:</label>
-    <input type="date" id="datePicker" />
+    <input type="date" id="datePicker">
     <div id="qaContainer"></div>
-  </div>
+  </main>
 
   <script src="script.js"></script>
 </body>
