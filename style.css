@@ -1,17 +1,17 @@
-/* Basic reset */
+/* Reset */
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-/* Body and fonts */
 body {
   font-family: 'Noto Sans Bengali', Arial, sans-serif;
   background-color: #f9fafb;
-  margin: 0;
-  padding: 15px;
   color: #222;
   line-height: 1.5;
   min-height: 100vh;
+  padding: 15px;
 }
 
 /* Header */
@@ -26,55 +26,67 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 15px;
+  gap: 10px;
   z-index: 100;
   user-select: none;
 }
 
-/* Search box wrapper */
+/* Search wrapper */
 .search-wrapper {
-  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 5px;
   flex-grow: 1;
   max-width: 350px;
-  transition: max-width 0.3s ease;
+  position: relative;
 }
 
 /* Search input */
 #searchBox {
-  width: 100%;
-  padding: 8px 32px 8px 12px;
+  flex-grow: 1;
+  padding: 8px 12px;
   font-size: 1rem;
-  border: none;
   border-radius: 5px;
+  border: none;
   outline: none;
   transition: width 0.3s ease;
 }
 
-/* Search input expanded when focused */
-#searchBox:focus {
-  width: 100%;
-  max-width: 400px;
+/* Search button */
+#searchBtn {
+  background: #2980b9;
+  border: none;
+  color: white;
+  font-size: 1.3rem;
+  padding: 8px 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.3s ease;
 }
 
-/* Clear (×) button */
+#searchBtn:hover {
+  background: #1c5980;
+}
+
+/* Clear button */
 #searchClearBtn {
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
   background: transparent;
   border: none;
-  color: #666;
-  font-size: 1.3rem;
+  color: white;
+  font-size: 1.4rem;
   cursor: pointer;
-  display: none;
   user-select: none;
+  display: none;
+  position: absolute;
+  right: 35px;
+  top: 50%;
+  transform: translateY(-50%);
   padding: 0;
 }
 
-/* Show clear button when input has focus or text */
-#searchBox:not(:placeholder-shown) + #searchClearBtn,
-#searchBox:focus + #searchClearBtn {
+/* Show clear button only when input has text */
+#searchBox:not(:placeholder-shown) ~ #searchClearBtn {
   display: block;
 }
 
@@ -97,7 +109,7 @@ label {
   font-size: 1.1rem;
 }
 
-/* Date picker input */
+/* Date picker */
 #datePicker {
   width: 100%;
   padding: 12px 14px;
@@ -113,7 +125,7 @@ label {
   box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
 }
 
-/* Question-answer cards */
+/* Cards */
 .card {
   background: #fefefe;
   border: 1px solid #ddd;
@@ -143,19 +155,7 @@ label {
   font-size: 0.95rem;
 }
 
-/* Responsive adjustments */
-@media (max-width: 600px) {
-  .container {
-    max-width: 100%;
-    padding: 15px 12px;
-  }
-
-  header {
-    font-size: 1.5rem;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-}
+/* Pagination styles for results.html */
 .pagination {
   margin-top: 20px;
   text-align: center;
@@ -185,4 +185,17 @@ label {
 .pagination button.active {
   background-color: #2c3e50;
   cursor: default;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .container {
+    max-width: 100%;
+    padding: 15px 12px;
+  }
+
+  header {
+    font-size: 1.5rem;
+    flex-wrap: wrap;
+  }
 }

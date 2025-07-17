@@ -1,4 +1,3 @@
-// get search keyword from URL
 function getQueryParam(param) {
   const urlParams = new URLSearchParams(window.location.search);
   return urlParams.get(param) || "";
@@ -16,7 +15,6 @@ let searchKeyword = getQueryParam("search").trim().toLowerCase();
 
 function highlightText(text, keyword) {
   if (!keyword) return text;
-  // Escape regex special chars in keyword
   const escapedKeyword = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const regex = new RegExp(`(${escapedKeyword})`, "gi");
   return text.replace(regex, `<mark>$1</mark>`);
@@ -69,7 +67,7 @@ function renderPagination() {
   });
   pagination.appendChild(prevBtn);
 
-  // Page numbers (simple: show 1 to totalPages)
+  // Page numbers
   for (let i = 1; i <= totalPages; i++) {
     const pageBtn = document.createElement("button");
     pageBtn.textContent = i;
@@ -94,7 +92,7 @@ function renderPagination() {
   pagination.appendChild(nextBtn);
 }
 
-// Load data and filter by search keyword
+// ডেটা লোড এবং সার্চ ফিল্টার করা
 fetch(gkDataUrl)
   .then(res => res.json())
   .then(data => {
