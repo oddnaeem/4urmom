@@ -1,18 +1,27 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>সাম্প্রতিক জিকে </title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>সাম্প্রতিক জিকে</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>সাম্প্রতিক জিকে </header>
+  <header>সাম্প্রতিক জিকে</header>
+
   <div class="container">
-    <label for="datePicker"> তারিখ নির্বাচন করুন:</label>
-    <input type="date" id="datePicker">
+    <label for="datePicker">তারিখ নির্বাচন করুন:</label>
+    <input type="date" id="datePicker" />
+
+    <br /><br />
+
+    <label for="searchBox">সার্চ করুন:</label>
+    <input type="text" id="searchBox" placeholder="যেমন: পদত্যাগ..." />
+    <button onclick="startSearch()">🔍</button>
+
     <div id="qaContainer"></div>
   </div>
+
   <script src="script.js"></script>
 </body>
 </html>
