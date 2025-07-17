@@ -1,7 +1,7 @@
 const params = new URLSearchParams(window.location.search);
 const id = params.get('id');
 
-fetch('../data.json')
+fetch('data.json')
   .then(res => res.json())
   .then(data => {
     const [date, index] = id.split('_');
