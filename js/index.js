@@ -1,6 +1,6 @@
 document.getElementById('datePicker').addEventListener('change', function () {
   const selectedDate = this.value;
-  fetch('../data.json')
+  fetch('js/data.json')
     .then(res => res.json())
     .then(data => {
       const questions = data[selectedDate] || [];
